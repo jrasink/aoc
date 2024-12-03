@@ -1,0 +1,9 @@
+{
+    "elapsed": 1.512,
+    "result": 48,
+    "logs": [
+        "Running year 2024, day 3, part 2 with test input (size 73)",
+        "---",
+        "Elapsed: 1.512ms, result: 48"
+    ]
+}

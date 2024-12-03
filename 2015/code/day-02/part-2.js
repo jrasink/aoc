@@ -22,8 +22,3 @@ export default (input) => {
 
   return total;
 }
-
-// Running year 2015, day 2, part 2 with real input (size 8111)
-// ---
-// Elapsed: 3.321ms
-// Result: 3783758

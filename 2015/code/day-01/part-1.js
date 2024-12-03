@@ -18,8 +18,3 @@ export default (input) => {
 
   return f;
 }
-
-// Running year 2015, day 1, part 1 with real input (size 7000)
-// ---
-// Elapsed: 0.478ms
-// Result: 74
