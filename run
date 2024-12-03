@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# ./run year day part
+# ./run 2024 01 01
+# ./run 2024 01 01 --test
+
+node index.js "$@"
