@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
   const parseLine = (s) => s.split('x').map((s) => parseInt(s, 10));
 
   const parseInput = (s) => s.split('\n').map(parseLine);

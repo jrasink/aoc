@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
   const lines = input.split('\n');
 
   const [line] = lines;

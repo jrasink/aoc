@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
   const is = input.match(/mul\((\d+),(\d+)\)|do\(\)|don't\(\)/g);
 
   const [fs] = is.reduce(([fs, b], i) => {

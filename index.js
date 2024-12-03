@@ -1,6 +1,6 @@
-const { measureTime, getCode, getInput, getParams } = require('./lib/utils');
+import { getCode, getInput, getParams } from './lib/utils.js';
 
-try {
+(async () => {
   const { params, options } = getParams();
   const [year, day, part] = params;
 
@@ -10,19 +10,15 @@ try {
 
   const { test: isTest } = options;
 
-  const input = getInput(year, day, isTest);
-  const run = getCode(year, day, part);
+  const input = await getInput(year, day, isTest);
+  const run = await getCode(year, day, part);
 
   console.log(`Running year ${year}, day ${day}, part ${part} with ${isTest ? 'test' : 'real'} input (size ${input.length})`);
   console.log('---')
 
-  const getTime = measureTime();
-
-  const result = run(input);
-
-  const elapsed = getTime();
+  const { elapsed, result } = await run(input);
 
   console.log(`Elapsed: ${elapsed}ms, result: ${result}`);
-} catch (e) {
+})().catch((e) => {
   throw e;
-}
+});

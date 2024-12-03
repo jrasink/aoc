@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
   const is = input.match(/mul\((\d+),(\d+)\)/g);
 
   const ms = is.map((i) => i.match(/(\d+)/g).map((s) => parseInt(s, 10)));

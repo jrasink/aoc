@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
   const parseInput = (s) => s.split('\n').reduce(
     ([xs, ys], s) => {
       const [x, y] = s.split('   ');
