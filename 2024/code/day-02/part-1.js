@@ -43,7 +43,3 @@ export default (input) => {
 
   return ss.length;
 }
-
-// Running year 2024, day 2, part 1 with real input (size 19341)
-// ---
-// Elapsed: 2.115ms, result: 549

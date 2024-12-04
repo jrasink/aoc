@@ -1,4 +1,4 @@
-# AOC Solutions / JS
+# AoC Solutions / JS
 
 ```
 # run year 2024, day 1, part 2 with test input

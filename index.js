@@ -4,6 +4,7 @@ import { getCode, getInput, getContext, writeOutput } from './lib/utils.js';
   const { year, day, part, options } = getContext();
 
   const logs = [];
+
   const log = (...xs) => {
     logs.push(...xs);
     if (!options.quiet) {
@@ -15,7 +16,6 @@ import { getCode, getInput, getContext, writeOutput } from './lib/utils.js';
   const run = await getCode({ year, day, part, options });
 
   log(`Running year ${year}, day ${day}, part ${part} with ${options.test ? 'test' : 'real'} input (size ${input.length})`);
-  log('---')
 
   const { elapsed, result } = await run(input);
 

@@ -9,7 +9,3 @@ export default (input) => {
 
   return result;
 }
-
-// Running year 2024, day 3, part 1 with real input (size 17699)
-// ---
-// Elapsed: 1.132ms, result: 164730528
