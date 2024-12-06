@@ -1,10 +1,7 @@
 export default (input) => {
   const C = {
     free: '.',
-    obstacle: '#',
-    pipe: '|',
-    dash: '-',
-    cross: '+'
+    obstacle: '#'
   };
 
   const D = {
@@ -14,67 +11,100 @@ export default (input) => {
     w: '<'
   };
 
-  const rows = input.split('\n').length;
-  const cols = input.split('\n').shift().length;
-  const value = ({ x, y }) => rows * y + x;
-  const isInside = ({ x, y }) => y >= 0 && y < rows && x >= 0 && x < cols;
+  const matrix = input.split('\n').map((s) => s.split(''));
+  const rows = matrix.length;
+  const cols = matrix[0].length;
 
-  const blocked = input.split('\n').reduce((blocked, s, y) => s.split('').reduce((blocked, s, x) => s === C.obstacle ? [...blocked, value({ x, y })] : blocked, blocked), []);
-  const isBlocked = (bs, p) => bs.includes(value(p))
+  const isValid = ({ x, y }) => y >= 0 && y < rows && x >= 0 && x < cols;
+  const index = ({ x, y }) => rows * y + x;
+  const coords = (k) => ({ x: k % rows, y: Math.floor(k / rows) });
 
-  const start = input.split('\n').reduce((start, s, y) => s.split('').reduce((start, s, x) => Object.values(D).reduce((start, d) => s === d ? ({ x, y, d }) : start, start), start, null));
+  const blocks = [];
+  let start;
 
-  const move = ({ x, y, d }) => {
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < rows; x++) {
+      if (matrix[y][x] === C.obstacle) {
+        blocks.push(index({ x, y }));
+      }
+      if (matrix[y][x] === D.n) {
+        start = { k: index({ x, y }), d: D.n };
+      }
+    }
+  }
+
+  const move = ({ k, d }) => {
+    const ret = (p) => isValid(p) ? { d, k: index(p) } : null;
+
+    const { x, y } = coords(k);
+
     switch (d) {
       case D.n:
-        return { x, y: y - 1, d };
+        return ret({ x, y: y - 1 });
       case D.s:
-        return { x, y: y + 1, d };
+        return ret({ x, y: y + 1 });
       case D.e:
-        return { x: x + 1, y, d };
+        return ret({ x: x + 1, y });
       case D.w:
-        return { x: x - 1, y, d };
+        return ret({ x: x - 1, y });
     }
   };
 
-  const rot = ({ x, y, d }) => {
+  const rot = ({ k, d }) => {
     switch (d) {
       case D.n:
-        return { x, y, d: D.e };
+        return { k, d: D.e };
       case D.s:
-        return { x, y, d: D.w };
+        return { k, d: D.w };
       case D.e:
-        return { x, y, d: D.s };
+        return { k, d: D.s };
       case D.w:
-        return { x, y, d: D.n };
+        return { k, d: D.n };
     }
   };
 
-  const walk = (bs, p) => {
-    const path = [{ x: p.x, y: p.y, d: p.d }];
+  const visited = (path, p) => {
+    for (const { k, d } of path) {
+      if (k === p.k && d === p.d) {
+        return true;
+      }
+    }
+    return false;
+  };
 
-    let c = p;
+  const walk = (blocks, start) => {
+    const path = [];
+
+    const visit = (p) => {
+      path.push({ k: p.k, d: p.d });
+    }
+
+    let current = start;
 
     while (true) {
-      const k = move(c);
+      visit(current);
 
-      if (!isInside(k)) {
-        return path;
+      const next = move(current);
+
+      if (!next) {
+        return { path, loop: false };
       }
 
-      if (isBlocked(bs, k)) {
-        c = rot(c);
+      if (visited(path, next)) {
+        return { path, loop: true };
+      }
+
+      if (blocks.includes(next.k)) {
+        current = rot(current);
       } else {
-        c = k;
+        current = next;
       }
-
-      path.push({ x: c.x, y: c.y, d: c.d });
     }
   };
 
-  const path = walk(blocked, start);
+  const { path } = walk(blocks, start);
 
-  const n = path.map(value).reduce((vs, v) => vs.includes(v) ? vs : [...vs, v], []).length;
+  const n = path.map(({ k }) => k).reduce((vs, v) => vs.includes(v) ? vs : [...vs, v], []).length;
 
   return n;
-}
+};
