@@ -86,7 +86,7 @@ export default (input) => {
 
       const next = move(current);
 
-      if (!next) {
+      if (next === null) {
         return { path, loop: false };
       }
 
