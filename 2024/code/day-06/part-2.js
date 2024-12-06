@@ -23,7 +23,7 @@ export default (input) => {
   let start;
 
   for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < rows; x++) {
+    for (let x = 0; x < cols; x++) {
       if (matrix[y][x] === C.obstacle) {
         blocks.push(index({ x, y }));
       }
