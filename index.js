@@ -3,6 +3,12 @@ import { getCode, getInput, getContext, writeOutput } from './lib/utils.js';
 (async () => {
   const { year, day, part, options } = getContext();
 
+  if (options.create) {
+    // todo
+    // create code and input files for the day if they don't exist
+    // fetch actual input from aoc
+  }
+
   const logs = [];
 
   const log = (...xs) => {
