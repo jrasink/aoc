@@ -12,7 +12,7 @@ export default (input) => {
   const offset = [[0, -1], [1, 0], [0, 1], [-1, 0]];
   const dirs = offset.length;
 
-  const blockMap = matrix.map((cs) => cs.map((c) => c === C.obstacle));
+  const bmap = matrix.map((cs) => cs.map((c) => c === C.obstacle));
 
   const start = (() => {
     for (let y = 0; y < rows; y++) {
@@ -27,52 +27,49 @@ export default (input) => {
   const move = ({ x, y, d }) => ({ x: x + offset[d][0], y: y + offset[d][1], d });
   const rot = ({ x, y, d }) => ({ x, y, d: (d + 1) % dirs });
 
-  const walk = (blockMap, start) => {
-    const isBlocked = ({ x, y }) => blockMap[y][x];
-    const isInside = ({ x, y }) => y >= 0 && y < rows && x >= 0 && x < cols;
-
-    const positionVisitMap = [...Array(rows)].map(() => [...Array(cols)]);
-    const directionVisitMap = [...Array(rows)].map(() => [...Array(cols)].map(() => [...Array(dirs)]));
-
-    const isVisited = ({ x, y }) => !!positionVisitMap[y][x];
-    const isVisitedInDirection = ({ x, y, d }) => !!directionVisitMap[y][x][d];
-
+  const walk = (start, bmap, dmap) => {
     const path = [];
-
-    const visit = ({ x, y, d }) => {
-      if (!isVisited({ x, y })) {
-        path.push({ x, y });
-        positionVisitMap[y][x] = true;
-      }
-      directionVisitMap[y][x][d] = true;
-    }
 
     let current = start;
 
     while (true) {
-      visit(current);
+      path.push(current);
 
-      const next = move(current);
+      const { x, y, d } = move(current);
 
-      if (!isInside(next)) {
+      if (y < 0 || y >= rows || x < 0 || x >= cols) {
         return { path, loop: false };
       }
 
-      if (isVisitedInDirection(next)) {
+      if (dmap[y][x][d]) {
         return { path, loop: true };
       }
 
-      if (isBlocked(next)) {
+      dmap[y][x][d] = true;
+
+      if (bmap[y][x]) {
         current = rot(current);
       } else {
-        current = next;
+        current = { x, y, d };
       }
     }
   };
 
-  const { path } = walk(blockMap, start);
+  const dmap = [...Array(rows)].map(() => [...Array(cols)].map(() => [...Array(dirs)]));
+  const getDmapCopy = () => dmap.map((xs) => xs.map((xs) => [...xs]));
 
-  const n = path.length;
+  const { path } = walk(start, bmap, getDmapCopy());
 
-  return n;
+  let results = 0;
+
+  const tmap = [...Array(rows)].map(() => [...Array(cols)]);
+
+  for (const { x, y, d } of path) {
+    if (!tmap[y][x]) {
+      results += 1;
+      tmap[y][x] = true;
+    }
+  }
+
+  return results;
 };
