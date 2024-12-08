@@ -1,82 +1,50 @@
 export default (input) => {
   const C = {
     free: '.',
-    obstacle: '#'
-  };
-
-  const D = {
-    n: '^',
-    s: 'v',
-    e: '>',
-    w: '<'
+    obstacle: '#',
+    start: '^'
   };
 
   const matrix = input.split('\n').map((s) => s.split(''));
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  const isValid = ({ x, y }) => y >= 0 && y < rows && x >= 0 && x < cols;
-  const index = ({ x, y }) => rows * y + x;
-  const coords = (k) => ({ x: k % rows, y: Math.floor(k / rows) });
+  const offset = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+  const dirs = offset.length;
 
-  const blocks = [];
-  let start;
+  const blockMap = matrix.map((cs) => cs.map((c) => c === C.obstacle));
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      if (matrix[y][x] === C.obstacle) {
-        blocks.push(index({ x, y }));
-      }
-      if (matrix[y][x] === D.n) {
-        start = { k: index({ x, y }), d: D.n };
+  const start = (() => {
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if (matrix[y][x] === C.start) {
+          return { x, y, d: 0 };
+        }
       }
     }
-  }
+  })();
 
-  const move = ({ k, d }) => {
-    const ret = (p) => isValid(p) ? { d, k: index(p) } : null;
+  const move = ({ x, y, d }) => ({ x: x + offset[d][0], y: y + offset[d][1], d });
+  const rot = ({ x, y, d }) => ({ x, y, d: (d + 1) % dirs });
 
-    const { x, y } = coords(k);
+  const walk = (blockMap, start) => {
+    const isBlocked = ({ x, y }) => blockMap[y][x];
+    const isInside = ({ x, y }) => y >= 0 && y < rows && x >= 0 && x < cols;
 
-    switch (d) {
-      case D.n:
-        return ret({ x, y: y - 1 });
-      case D.s:
-        return ret({ x, y: y + 1 });
-      case D.e:
-        return ret({ x: x + 1, y });
-      case D.w:
-        return ret({ x: x - 1, y });
-    }
-  };
+    const positionVisitMap = [...Array(rows)].map(() => [...Array(cols)]);
+    const directionVisitMap = [...Array(rows)].map(() => [...Array(cols)].map(() => [...Array(dirs)]));
 
-  const rot = ({ k, d }) => {
-    switch (d) {
-      case D.n:
-        return { k, d: D.e };
-      case D.s:
-        return { k, d: D.w };
-      case D.e:
-        return { k, d: D.s };
-      case D.w:
-        return { k, d: D.n };
-    }
-  };
+    const isVisited = ({ x, y }) => !!positionVisitMap[y][x];
+    const isVisitedInDirection = ({ x, y, d }) => !!directionVisitMap[y][x][d];
 
-  const visited = (path, p) => {
-    for (const { k, d } of path) {
-      if (k === p.k && d === p.d) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const walk = (blocks, start) => {
     const path = [];
 
-    const visit = (p) => {
-      path.push({ k: p.k, d: p.d });
+    const visit = ({ x, y, d }) => {
+      if (!isVisited({ x, y })) {
+        path.push({ x, y });
+        positionVisitMap[y][x] = true;
+      }
+      directionVisitMap[y][x][d] = true;
     }
 
     let current = start;
@@ -86,15 +54,15 @@ export default (input) => {
 
       const next = move(current);
 
-      if (next === null) {
+      if (!isInside(next)) {
         return { path, loop: false };
       }
 
-      if (visited(path, next)) {
+      if (isVisitedInDirection(next)) {
         return { path, loop: true };
       }
 
-      if (blocks.includes(next.k)) {
+      if (isBlocked(next)) {
         current = rot(current);
       } else {
         current = next;
@@ -102,17 +70,15 @@ export default (input) => {
     }
   };
 
-  const { path } = walk(blocks, start);
+  const { path } = walk(blockMap, start);
 
-  const uniqueCandidates = path.map(({ k }) => k).reduce((cs, k) => cs.includes(k) ? cs : [...cs, k], []);
-
-  const test = (k) => {
-    const testBlocks = [...blocks, k];
-    const { loop } = walk(testBlocks, start);
+  const test = (p) => {
+    const testBlockMap = blockMap.map((bs, y) => bs.map((b, x) => p.y === y && p.x === x ? true : b));
+    const { loop } = walk(testBlockMap, start);
     return loop;
   };
 
-  const n = uniqueCandidates.map(test).filter((b) => b).length;
+  const n = path.map(test).filter((b) => b).length;
 
   return n;
 };
