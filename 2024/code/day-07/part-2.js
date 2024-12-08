@@ -20,7 +20,9 @@ export default (input) => {
       return true;
     }
 
-    if (((r - p) > 0) && test([r - p, xs])) {
+    const d = r - p;
+
+    if ((d > 0) && test([d, xs])) {
       return true;
     }
 
