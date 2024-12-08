@@ -27,7 +27,9 @@ export default (input) => {
   const move = ({ x, y, d }) => ({ x: x + offset[d][0], y: y + offset[d][1], d });
   const rot = ({ x, y, d }) => ({ x, y, d: (d + 1) % dirs });
 
-  const walk = (start, bmap, dmap) => {
+  const walk = (start, bmap, dmapOriginal) => {
+    const dmap = dmapOriginal.map((xs) => xs.map((xs) => [...xs]));
+
     const path = [];
 
     let current = start;
@@ -56,9 +58,8 @@ export default (input) => {
   };
 
   const dmap = [...Array(rows)].map(() => [...Array(cols)].map(() => [...Array(dirs)]));
-  const getDmapCopy = () => dmap.map((xs) => xs.map((xs) => [...xs]));
 
-  const { path } = walk(start, bmap, getDmapCopy());
+  const { path } = walk(start, bmap, dmap);
 
   let results = 0;
 
@@ -69,7 +70,7 @@ export default (input) => {
   for (const { x, y, d } of path) {
     if (!tmap[y][x]) {
       const testBmap = bmap.map((bs, by) => bs.map((b, bx) => by === y && bx === x ? true : b));
-      const { loop } = walk(lpos, testBmap, getDmapCopy());
+      const { loop } = walk(lpos, testBmap, dmap);
       if (loop) {
         results += 1;
       }
