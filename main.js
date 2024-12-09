@@ -125,7 +125,7 @@ const init = async (params, options) => {
     const i = readline.createInterface({ input: stdin, output: stdout });
     i.question(`Creating code and input files for year ${year}, day ${day}. This will overwrite any existing files. Are you sure? `, (r) => {
       i.close();
-      if (!['y', 'yes'].includes(r)) {
+      if (!['y', 'yes'].includes(r.toLowerCase())) {
         console.log(`Ok fine.`);
         process.exit();
       }
@@ -171,11 +171,11 @@ const run = async (params, options) => {
   };
 
   const input = await getInput({ year, day, part, options });
-  const run = await getCode({ year, day, part, options });
+  const code = await getCode({ year, day, part, options });
 
   log(`Running year ${year}, day ${day}, part ${part} with ${options.test ? 'test' : 'real'} input (size ${input.length})`);
 
-  const { elapsed, result } = await run(input);
+  const { elapsed, result } = await code(input);
 
   log(`Elapsed: ${elapsed}ms, result: ${result}`);
 

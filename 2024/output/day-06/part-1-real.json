@@ -1,8 +1,8 @@
 {
-    "elapsed": 20.755,
+    "elapsed": 24.286,
     "result": 5129,
     "logs": [
         "Running year 2024, day 6, part 1 with real input (size 17029)",
-        "Elapsed: 20.755ms, result: 5129"
+        "Elapsed: 24.286ms, result: 5129"
     ]
 }
