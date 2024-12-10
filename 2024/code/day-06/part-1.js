@@ -12,22 +12,31 @@ export default (input) => {
   const offset = [[0, -1], [1, 0], [0, 1], [-1, 0]];
   const dirs = offset.length;
 
-  const bmap = matrix.map((cs) => cs.map((c) => c === C.obstacle));
+  const copy = (xs) => xs.map((x) => x);
 
-  const start = (() => {
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        if (matrix[y][x] === C.start) {
-          return { x, y, d: 0 };
-        }
+  const pIndex = ({ x, y }) => x + y * cols;
+  const dIndex = ({ x, y, d }) => d + dirs * pIndex({ x, y });
+
+  const bmap = Array(rows * cols);
+  let start;
+
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (matrix[y][x] === C.obstacle) {
+        const i = pIndex({ x, y });
+        bmap[i] = true;
+      }
+      if (matrix[y][x] === C.start) {
+        start = { x, y, d: 0 };
       }
     }
-  })();
+  }
 
   const move = ({ x, y, d }) => ({ x: x + offset[d][0], y: y + offset[d][1], d });
   const rot = ({ x, y, d }) => ({ x, y, d: (d + 1) % dirs });
 
-  const walk = (start, bmap, dmap) => {
+  const walk = (start, bmap, odmap) => {
+    const dmap = copy(odmap);
     const path = [];
 
     let current = start;
@@ -41,13 +50,17 @@ export default (input) => {
         return { path, loop: false };
       }
 
-      if (dmap[y][x][d]) {
+      const j = dIndex({ x, y, d });
+
+      if (dmap[j]) {
         return { path, loop: true };
       }
 
-      dmap[y][x][d] = true;
+      dmap[j] = true;
 
-      if (bmap[y][x]) {
+      const i = pIndex({ x, y });
+
+      if (bmap[i]) {
         current = rot(current);
       } else {
         current = { x, y, d };
@@ -55,19 +68,19 @@ export default (input) => {
     }
   };
 
-  const dmap = [...Array(rows)].map(() => [...Array(cols)].map(() => [...Array(dirs)]));
-  const getDmapCopy = () => dmap.map((xs) => xs.map((xs) => [...xs]));
+  const dmap = Array(rows * cols * dirs);
 
-  const { path } = walk(start, bmap, getDmapCopy());
+  const { path } = walk(start, bmap, dmap);
 
   let results = 0;
 
-  const tmap = [...Array(rows)].map(() => [...Array(cols)]);
+  const tmap = Array(rows * cols);
 
   for (const { x, y, d } of path) {
-    if (!tmap[y][x]) {
+    const i = pIndex({ x, y });
+    if (!tmap[i]) {
+      tmap[i] = true;
       results += 1;
-      tmap[y][x] = true;
     }
   }
 
