@@ -1,14 +1,12 @@
 export default (input) => {
-  const repeat = (v, n) => [...Array(n)].map(() => v);
+  const blocks = input.split('').reduce((blocks, s, i) => [...blocks, { f: (i & 1) ? 0 : 1, v: (i >> 1), l: parseInt(s, 10) }], []);
 
-  const blocks = input.split('').reduce((blocks, s, n) => [...blocks, { f: (n & 1) ? 0 : 1, v: (n >> 1), l: parseInt(s, 10) }], []);
+  let j = blocks.length - 1;
 
-  let j = blocks.length;
-
-  while ((j--) > 0) {
+  while (j > 0) {
     if (blocks[j].f) {
-      let i = -1;
-      while ((i++) < j) {
+      let i = 0;
+      while (i < j) {
         if (!blocks[i].f && (blocks[i].l >= blocks[j].l)) {
           blocks.splice(i, 0, { ...blocks[j] });
           i += 1;
@@ -17,13 +15,21 @@ export default (input) => {
           blocks[j].f = 0;
           break;
         }
+        i += 1;
       }
     }
+    j -= 1;
   }
 
-  const ps = blocks.reduce((ps, { f, v, l }) => [...ps, ...repeat({ f, v }, l)], []);
+  let r = 0;
+  let k = 0;
 
-  const r = ps.reduce((r, { f, v }, i) => r + (i * f * v), 0);
+  for (let i = 0; i < blocks.length; i++) {
+    const { f, v, l } = blocks[i];
+    for (let m = k + l; k < m; k++) {
+      r += f * v * k;
+    }
+  }
 
   return r;
 }
