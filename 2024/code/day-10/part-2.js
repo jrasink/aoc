@@ -1,3 +1,5 @@
+
+
 export default (input) => {
   const map = input.split('\n').map((s) => s.split('').map((s) => parseInt(s, 10)));
   const height = map.length;
@@ -7,15 +9,7 @@ export default (input) => {
 
   const neighbours = ({ x, y }) => [{ x: x - 1, y }, { x: x + 1, y }, { x, y: y - 1 }, { x, y: y + 1 }].filter(inside);
 
-  const m = Array(height * width);
-  const f = ({ x, y }) => width * y + x;
-  const next = (p) => {
-    const i = f(p);
-    if (!m[i]) {
-      m[i] = neighbours(p).filter((n) => (map[n.y][n.x] - map[p.y][p.x]) === 1);
-    }
-    return m[i];
-  }
+  const next = (p) => neighbours(p).filter((n) => (map[n.y][n.x] - map[p.y][p.x]) === 1);
 
   const hs = [];
 
@@ -35,7 +29,7 @@ export default (input) => {
     }
 
     return ps.length;
-  }
+  };
 
   const r = hs.map(scan).reduce((r, n) => r + n, 0);
 
