@@ -9,24 +9,19 @@ export default (input) => {
 
   const inside = ({ x, y }) => x >= 0 && x < cols && y >= 0 && y < rows;
 
-  const has = (ps, q) => {
-    for (const p of ps) {
-      if (p.x === q.x && p.y === q.y) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   const unique = (ps) => {
     const rs = [];
+    const m = Array(rows * cols);
+    const f = ({ x, y }) => cols * y + x;
     for (const p of ps) {
-      if (!has(rs, p)) {
+      const i = f(p);
+      if (!m[i]) {
+        m[i] = true;
         rs.push(p);
       }
     }
     return rs;
-  }
+  };
 
   const frequencies = [];
 
