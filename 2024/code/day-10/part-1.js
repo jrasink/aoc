@@ -5,24 +5,19 @@ export default (input) => {
 
   const inside = ({ y, x }) => y >= 0 && y < height && x >= 0 && x < width;
 
-  const neighbours = ({ x, y }) => [
-    { x: x - 1, y },
-    { x: x + 1, y },
-    { x, y: y - 1 },
-    { x, y: y + 1 }
-  ].filter(inside);
+  const neighbours = ({ x, y }) => [{ x: x - 1, y }, { x: x + 1, y }, { x, y: y - 1 }, { x, y: y + 1 }].filter(inside);
 
   const next = (p) => neighbours(p).filter((n) => (map[n.y][n.x] - map[p.y][p.x]) === 1);
 
   const unique = (ps) => {
     const rs = [];
     const m = Array(height * width);
+    const f = ({ x, y }) => width * y + x;
     for (const p of ps) {
-      const { x, y } = p;
-      const i = width * y + x;
+      const i = f(p);
       if (!m[i]) {
-        rs.push({ x, y });
         m[i] = true;
+        rs.push(p);
       }
     }
     return rs;
