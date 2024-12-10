@@ -1,5 +1,3 @@
-
-
 export default (input) => {
   const map = input.split('\n').map((s) => s.split('').map((s) => parseInt(s, 10)));
   const height = map.length;
