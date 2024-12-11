@@ -19,31 +19,23 @@ export default (input) => {
     return [2024 * n];
   }
 
-  const wrap = (xs) => {
-    const cs = Array();
-    const us = [];
-    for (const { number, count } of xs) {
-      if (!(number in cs)) {
-        cs[number] = 0;
-        us.push(number);
-      }
-      cs[number] += count;
-    }
-    return us.map((u) => ({ number: u, count: cs[u] }));
-  };
-
-  let xs = wrap(input.split(' ').map((s) => parseInt(s, 10)).map((n) => ({ number: n, count: 1 })));
+  let xs = input.split(' ').map((s) => parseInt(s, 10)).map((n) => ({ number: n, count: 1 }));
 
   for (let i = 0; i < 75; i++) {
-    const ys = [];
+    const cs = Array();
+    const us = [];
 
     for (const { number, count } of xs) {
       for (const n of step(number)) {
-        ys.push({ number: n, count });
+        if (!(n in cs)) {
+          cs[n] = 0;
+          us.push(n);
+        }
+        cs[n] += count;
       }
     }
 
-    xs = wrap(ys);
+    xs = us.map((u) => ({ number: u, count: cs[u] }));
   }
 
   return xs.reduce((n, { count }) => n + count, 0);
