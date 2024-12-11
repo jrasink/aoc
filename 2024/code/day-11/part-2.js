@@ -13,46 +13,38 @@ export default (input) => {
       const l = ds.length / 2;
       const ls = ds.slice(0, l);
       const rs = ds.slice(l);
-      while (rs[0] === 0 && rs.length > 1) {
-        rs.shift();
-      }
       return [number(ls), number(rs)];
     }
 
     return [2024 * n];
   }
 
-  const group = (ns) => {
-    const cs = Array(Math.max(...ns) + 1);
+  const wrap = (xs) => {
+    const cs = Array();
     const us = [];
-    for (const n of ns) {
-      if (!(n in cs)) {
-        cs[n] = 0;
-        us.push(n);
+    for (const { number, count } of xs) {
+      if (!(number in cs)) {
+        cs[number] = 0;
+        us.push(number);
       }
-      cs[n] += 1;
+      cs[number] += count;
     }
     return us.map((u) => ({ number: u, count: cs[u] }));
   };
 
-  const ns = input.split(' ').map((s) => parseInt(s, 10));
-
-  let gs = group(ns);
+  let xs = wrap(input.split(' ').map((s) => parseInt(s, 10)).map((n) => ({ number: n, count: 1 })));
 
   for (let i = 0; i < 75; i++) {
-    const cs = Array();
-    const us = [];
-    for (const { count, number } of gs) {
+    const ys = [];
+
+    for (const { number, count } of xs) {
       for (const n of step(number)) {
-        if (!(n in cs)) {
-          cs[n] = 0;
-          us.push(n);
-        }
-        cs[n] += count;
+        ys.push({ number: n, count });
       }
     }
-    gs = us.map((u) => ({ number: u, count: cs[u] }));
+
+    xs = wrap(ys);
   }
 
-  return gs.reduce((n, { count }) => n + count, 0);
+  return xs.reduce((n, { count }) => n + count, 0);
 }
