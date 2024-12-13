@@ -3,28 +3,10 @@ export default (input) => {
   const abs = (a) => a * sig(a);
   const gcd = (a, b) => b ? gcd(b, a % b) : abs(a);
 
-  class Fractional {
-    constructor (n, d) {
-      const g = gcd(n, d);
-      const s = sig(d);
-      this.numerator = s * n / g;
-      this.denominator = s * d / g;
-    }
-
-    get n () {
-      return this.numerator;
-    }
-
-    get d () {
-      return this.denominator;
-    }
-
-    toString () {
-      return this.d === 1n ? `${this.n}` : `${this.n}/${this.d}`;
-    }
+  const fractional = (n, d) => {
+    const g = gcd(n, d) * sig(d);
+    return { n: n / g, d: d / g }
   };
-
-  const fractional = (n, d) => new Fractional(n, d);
 
   const neg = (a) => fractional(-a.n, a.d);
   const inv = (a) => fractional(a.d, a.n);
