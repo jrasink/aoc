@@ -64,11 +64,11 @@ export default (input) => {
     const na = sub(div(p.x, a.x), mul(nb, div(b.x, a.x)));
 
     if (na.d !== 1n || nb.d !== 1n) {
-      return null;
+      return 0n;
     }
 
     return 3n * na.n + nb.n;
   }
 
-  return Number(claws.map(solve).filter((n) => n !== null).reduce((t, n) => t + n, 0n));
+  return Number(claws.map(solve).reduce((t, n) => t + n, 0n));
 }

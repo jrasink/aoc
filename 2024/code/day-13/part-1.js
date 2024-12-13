@@ -60,11 +60,11 @@ export default (input) => {
     const na = sub(div(p.x, a.x), mul(nb, div(b.x, a.x)));
 
     if (na.d !== 1 || nb.d !== 1) {
-      return null;
+      return 0;
     }
 
     return 3 * na.n + nb.n;
   }
 
-  return claws.map(solve).filter((n) => n !== null).reduce((t, n) => t + n, 0);
+  return claws.map(solve).reduce((t, n) => t + n, 0);
 }
