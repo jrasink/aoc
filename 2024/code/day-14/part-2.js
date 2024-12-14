@@ -49,6 +49,10 @@ export default (input) => {
 
   const patterns = robots.map(getPattern);
 
+  // all patterns have length 10403, meaning every robot visits every tile exactly once before repeating the pattern
+  // this means that the tile pattern repeats every 10403 steps
+  // the pattern we're looking for probably has the largest number of connected-neighbour robot positions
+
   const getMap = (t) => {
     const map = [...Array(height)].map(() => [...Array(width)].map(() => 0));
 
