@@ -58,22 +58,6 @@ export default (input) => {
     }
   }
 
-  const charAt = (i) => {
-    if (i === robot) {
-      return Symbol.robot;
-    }
-
-    if (walls[i]) {
-      return Symbol.wall;
-    }
-
-    if (boxes[i]) {
-      return Symbol.box;
-    }
-
-    return Symbol.free;
-  };
-
   const offset = [-width, width, -1, 1];
 
   const loose = (index, instruction) => {
@@ -97,6 +81,22 @@ export default (input) => {
       boxes[index] = false;
     }
   }
+
+  const charAt = (i) => {
+    if (i === robot) {
+      return Symbol.robot;
+    }
+
+    if (walls[i]) {
+      return Symbol.wall;
+    }
+
+    if (boxes[i]) {
+      return Symbol.box;
+    }
+
+    return Symbol.free;
+  };
 
   const dump = () => console.log([...Array(height)].map((_, y) => [...Array(width)].map((_, x) => charAt(width * y + x)).join('')).join('\n'));
 

@@ -62,26 +62,6 @@ export default (input) => {
     }
   }
 
-  const charAt = (i) => {
-    if (i === robot) {
-      return Symbol.robot;
-    }
-
-    if (walls[i]) {
-      return Symbol.wall;
-    }
-
-    if (boxes[i]) {
-      return Symbol.boxLeft;
-    }
-
-    if (boxes[i-1]) {
-      return Symbol.boxRight;
-    }
-
-    return Symbol.free;
-  };
-
   const offset = [-width, width, -1, 1];
   const block = [[-width, 1 - width], [width, 1 + width], [-1], [2]];
 
@@ -112,6 +92,26 @@ export default (input) => {
       boxes[p] = false;
     }
   }
+
+  const charAt = (i) => {
+    if (i === robot) {
+      return Symbol.robot;
+    }
+
+    if (walls[i]) {
+      return Symbol.wall;
+    }
+
+    if (boxes[i]) {
+      return Symbol.boxLeft;
+    }
+
+    if (boxes[i-1]) {
+      return Symbol.boxRight;
+    }
+
+    return Symbol.free;
+  };
 
   const dump = () => console.log([...Array(height)].map((_, y) => [...Array(width)].map((_, x) => charAt(width * y + x)).join('')).join('\n'));
 
