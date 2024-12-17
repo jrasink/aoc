@@ -105,9 +105,7 @@ export default (input) => {
     const ps = [];
 
     for (const { index } of neighbours(start, 1)) {
-      const nextScore = scores[index];
-
-      if (nextScore < score) {
+      if (scores[index] < score) {
         for (const path of paths(index)) {
           ps.push([start, ...path]);
         }
@@ -117,9 +115,9 @@ export default (input) => {
     return ps;
   }
 
-  const map = range(width * height).map(() => false);
+  const winners = paths(start * directions + Direction.east).map((path) => path.reverse()).filter(([last]) => scores[last] === 0);
 
-  const winners = paths(start * directions + Direction.east).filter((path) => scores[path[path.length - 1]] === 0);
+  const map = range(width * height).map(() => false);
 
   for (const path of winners) {
     for (const index of path) {
