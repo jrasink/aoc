@@ -1,5 +1,5 @@
 export default (input) => {
-  const program = input.split('\n\n').pop().split(': ').pop().split(',').map((s) => parseInt(s, 10));
+  const program = input.split('\n\n').pop().split(': ').pop().split(',').map((s) => parseInt(s, 10)).map((n) => BigInt(n));
   // Program: 2,4, 1,2, 7,5, 1,7, 4,4, 0,3, 5,5, 3,0
 
   // 2,4 -- bst [a]  -- b = a & 7
@@ -26,7 +26,7 @@ export default (input) => {
     const rs = [];
     for (let n = 0n; n < 8n; n++) {
       const t = (a << 3n) + n;
-      if ((((((t & 7n) ^ 2n) ^ 7n) ^ (t >> ((t & 7n) ^ 2n))) & 7n) === BigInt(output)) {
+      if ((((((t & 7n) ^ 2n) ^ 7n) ^ (t >> ((t & 7n) ^ 2n))) & 7n) === output) {
         rs.push(t);
       }
     }
