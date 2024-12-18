@@ -33,7 +33,7 @@ export default (input) => {
     return rs;
   };
 
-  const solve = (target, current = 0n, step = 0) => {
+  const solve = (target, current = 0n) => {
     if (!target.length) {
       return current;
     }
@@ -43,7 +43,7 @@ export default (input) => {
     const options = find(current, output);
 
     for (const option of options) {
-      const t = solve(target.slice(0, -1), option, step + 1);
+      const t = solve(target.slice(0, -1), option);
 
       if (t !== null) {
         return t;
