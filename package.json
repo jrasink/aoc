@@ -1,0 +1,21 @@
+{
+  "name": "aoc",
+  "version": "1.0.0",
+  "description": "Advent of Code solutions",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "run": "node main.js run",
+    "init": "node main.js init"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrasink/aoc.git"
+  },
+  "author": "This Justin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jrasink/aoc/issues"
+  },
+  "homepage": "https://github.com/jrasink/aoc#readme"
+}
