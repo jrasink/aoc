@@ -28,5 +28,5 @@ export default (input) => {
     return false;
   });
 
-  return patterns.reduce((n, pattern) => n + test(pattern), 0);
+  return patterns.filter(test).length;
 }
