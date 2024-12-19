@@ -22,11 +22,13 @@ export default (input) => {
   // - sometimes there will be more than one option for the three bits
   // - since we need the lowest result, use depth first search starting with the lowest values
 
+  const next = (a) => ((((a & 7n) ^ 2n) ^ 7n) ^ (a >> ((a & 7n) ^ 2n))) & 7n;
+
   const find = (a, output) => {
     const rs = [];
     for (let n = 0n; n < 8n; n++) {
       const t = (a << 3n) + n;
-      if ((((((t & 7n) ^ 2n) ^ 7n) ^ (t >> ((t & 7n) ^ 2n))) & 7n) === output) {
+      if (next(t) === output) {
         rs.push(t);
       }
     }
