@@ -63,9 +63,9 @@ export default (input) => {
     return ns.filter((i) => !walls[i]);
   }
 
-  const distances = range(width * height).map(() => null);
-
   const scan = () => {
+    const distances = range(width * height).map(() => null);
+
     distances[end] = 0;
 
     let ms = [end];
@@ -86,9 +86,11 @@ export default (input) => {
 
       ms = ns;
     }
+
+    return distances;
   };
 
-  scan();
+  const distances = scan();
 
   const cheats = range(width * height).map(() => null);
 

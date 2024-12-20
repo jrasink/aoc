@@ -63,7 +63,7 @@ export default (input) => {
     return ns;
   }
 
-  const getDistances = () => {
+  const scan = () => {
     const distances = range(width * height).map(() => null);
 
     let ms = [end];
@@ -90,58 +90,26 @@ export default (input) => {
     return distances;
   };
 
-  const distances = getDistances();
+  const distances = scan();
 
-  const cutoff = input.length > 20000 ? 100 : 50;
+  const cheat = () => {
+    let cheats = 0;
 
-  const getIndexCheats = (i) => {
-    const scanned = range(width * height).map(() => null);
-    const cheats = range(width * height).map(() => 0);
-
-    let ms = [i];
-    let depth = 0;
-
-    while (ms.length > 0 && depth < 20) {
-      depth += 1;
-
-      const ns = [];
-
-      for (const m of ms) {
-        const ts = neighbours(m);
-
-        for (const t of ts) {
-          if (!scanned[t]) {
-            scanned[t] = true;
-            ns.push(t);
-          }
-
-          if (!walls[t]) {
-            const score = (distances[t] - distances[i]) - depth;
-
-            if (cheats[t] < score)  {
-              cheats[t] = score;
+    for (let p = 0; p < width * height; p++) {
+      if (!walls[p]) {
+        for (let q = 0; q < width * height; q++) {
+          const d = Math.abs(Math.floor(p / width) - Math.floor(q / width)) + Math.abs((p % width) - (q % width));
+          if (d < 21 && !walls[q]) {
+            if (((distances[p] - distances[q]) - d) >= 100) {
+              cheats += 1;
             }
           }
         }
-      }
-
-      ms = ns;
-    }
-
-    return cheats.filter((score) => score >= cutoff).length;
-  }
-
-  const getCheats = () => {
-    let cheats = 0;
-
-    for (let i = 0; i < walls.length; i++) {
-      if (!walls[i]) {
-        cheats += getIndexCheats(i);
       }
     }
 
     return cheats;
   }
 
-  return getCheats();
+  return cheat();
 }
