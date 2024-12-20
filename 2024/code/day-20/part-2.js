@@ -60,7 +60,7 @@ export default (input) => {
       ns.push(i + width);
     }
 
-    return ns;
+    return ns.filter((i) => !walls[i]);
   }
 
   const scan = () => {
@@ -76,7 +76,7 @@ export default (input) => {
       for (const m of ms) {
         const d = distances[m] + 1;
 
-        for (const n of neighbours(m).filter((i) => !walls[i])) {
+        for (const n of neighbours(m)) {
           if (distances[n] === null || distances[n] > d) {
             distances[n] = d;
             ns.push(n);
