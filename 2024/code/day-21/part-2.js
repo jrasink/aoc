@@ -168,9 +168,7 @@ export default (input) => {
 
     for (const next of seq) {
       const pss = findPaths(dPad, current, next);
-
-      s += pss.reduce((min, ps) => min === null ? dscore(ps, depth - 1) : Math.min(min, dscore(ps, depth - 1)), null);
-
+      s += Math.min(...pss.map((ps) => dscore(ps, depth - 1)));
       current = next;
     }
 
@@ -184,7 +182,7 @@ export default (input) => {
 
     for (const next of seq) {
       const pss = findPaths(kPad, current, next);
-      s += pss.reduce((min, ps) => min === null ? dscore(ps, 25) : Math.min(min, dscore(ps, 25)), null);
+      s += Math.min(...pss.map((ps) => dscore(ps, 25)));
       current = next;
     }
 
