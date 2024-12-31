@@ -266,7 +266,7 @@ export default (input) => {
   swap(7, 18);
   swap(52, 97);
 
-  // check(inbits);
+  check(inbits);
 
   return swaps.sort((a, b) => a > b ? 1 : -1).join(',');
 }

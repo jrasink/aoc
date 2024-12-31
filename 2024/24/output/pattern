@@ -1,0 +1,47 @@
+# output for z08
+xor(
+  xor(x08, y08),
+  or(
+    and(x07, y07),
+    and(
+      xor(x07, y07),
+      or(
+        and(x06, y06),
+        and(
+          xor(x06, y06),
+          or(
+            and(y05, x05),
+            and(
+              xor(y05, x05),
+              or(
+                and(x04, y04),
+                and(
+                  xor(y04, x04),
+                  or(
+                    and(x03, y03),
+                    and(
+                      xor(y03, x03),
+                      or(
+                        and(x02, y02),
+                        and(
+                          xor(y02, x02),
+                          or(
+                            and(x01, y01),
+                            and(
+                              xor(x01, y01),
+                              and(y00, x00)
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
