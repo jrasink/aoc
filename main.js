@@ -29,30 +29,30 @@ const timed = (f) => async (...xs) => {
 
 const getCode = async ({ year, day, part }) => {
   const s = `0${day}`.slice(-2);
-  const { default: run } = await import(`./${year}/code/day-${s}/part-${part}.js`);
+  const { default: run } = await import(`./${year}/${s}/code/part-${part}.js`);
   return timed(run);
 };
 
 const getInput = async ({ year, day, options }) => {
   const s = `0${day}`.slice(-2);
-  const b = await fs.readFile(`./${year}/input/day-${s}/${options.test ? STAGE.test : STAGE.real}`);
+  const b = await fs.readFile(`./${year}/${s}/input/${options.test ? STAGE.test : STAGE.real}`);
   return b.toString();
 };
 
 const writeOutput = async ({ year, day, part, options }, { elapsed, result, logs }) => {
   const s = `0${day}`.slice(-2);
-  await fs.mkdir(`./${year}/output/day-${s}`, { recursive: true });
-  await fs.writeFile(`./${year}/output/day-${s}/part-${part}-${options.test ? STAGE.test : STAGE.real}.json`, Buffer.from(JSON.stringify({ elapsed, result, logs }, null, 4)));
+  await fs.mkdir(`./${year}/${s}/output`, { recursive: true });
+  await fs.writeFile(`./${year}/${s}/output/part-${part}-${options.test ? STAGE.test : STAGE.real}.json`, Buffer.from(JSON.stringify({ elapsed, result, logs }, null, 4)));
 };
 
 const createFiles = async ({ year, day }) => {
   const s = `0${day}`.slice(-2);
-  await fs.mkdir(`./${year}/code/day-${s}`, { recursive: true });
-  await fs.mkdir(`./${year}/input/day-${s}`, { recursive: true });
-  await fs.writeFile(`./${year}/code/day-${s}/part-1.js`, Buffer.from(`export default (input) => {\n\n}`));
-  await fs.writeFile(`./${year}/code/day-${s}/part-2.js`, Buffer.from(`export default (input) => {\n\n}`));
-  await fs.writeFile(`./${year}/input/day-${s}/${STAGE.test}`, '');
-  await fs.writeFile(`./${year}/input/day-${s}/${STAGE.real}`, '');
+  await fs.mkdir(`./${year}/${s}/code`, { recursive: true });
+  await fs.mkdir(`./${year}/${s}/input`, { recursive: true });
+  await fs.writeFile(`./${year}/${s}/code/part-1.js`, Buffer.from(`export default (input) => {\n\n}\n`));
+  await fs.writeFile(`./${year}/${s}/code/part-2.js`, Buffer.from(`export default (input) => {\n\n}\n`));
+  await fs.writeFile(`./${year}/${s}/input/${STAGE.test}`, '');
+  await fs.writeFile(`./${year}/${s}/input/${STAGE.real}`, '');
 };
 
 const getParams = () => {
