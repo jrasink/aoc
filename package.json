@@ -5,8 +5,10 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "run": "node main.js run",
-    "init": "node main.js init"
+    "init": "node main.js init",
+    "part": "node main.js part",
+    "day": "node main.js day",
+    "year": "node main.js year"
   },
   "repository": {
     "type": "git",

@@ -30,7 +30,7 @@ export default (input) => {
     for (let m = n + 1; m < nodes.length; m++) {
       for (let k = m + 1; k < nodes.length; k++) {
         if (connected(n, m) && connected(n, k) && connected(m, k)) {
-          if ([n, m, k].map((i) => names[i][0] === 't').reduce((r, b) => r || b, false)) {
+          if ([n, m, k].map((i) => nodes[i][0] === 't').reduce((r, b) => r || b, false)) {
             count += 1;
           }
         }

@@ -109,7 +109,7 @@ export default (input) => {
   let score = 0;
   let time = 0;
 
-  for (let t = 0; t < 10403; t++) {
+  for (let t = 0; t < (width * height); t++) {
     const s = getConnectedScore(t);
     if (s > score) {
       score = s;

@@ -1,9 +1,0 @@
-{
-    "elapsed": 0.269,
-    "result": 1006,
-    "logs": [
-        "Running year 2015, day 2, part 2 with test input (size 20)",
-        "---",
-        "Elapsed: 0.269ms, result: 1006"
-    ]
-}

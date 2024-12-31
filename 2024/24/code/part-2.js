@@ -1,6 +1,4 @@
 export default (input) => {
-  const isTest = input.length < 200;
-
   const [gatesString] = input.split('\n\n').slice(1);
 
   const ops = {

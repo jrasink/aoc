@@ -23,8 +23,8 @@ const measureTime = () => {
 const timed = (f) => async (...xs) => {
   const t = measureTime();
   const result = await f(...xs);
-  const elapsed = t();
-  return { result, elapsed };
+  const time = t();
+  return { result, time };
 };
 
 const getCode = async ({ year, day, part }) => {
@@ -39,10 +39,10 @@ const getInput = async ({ year, day, options }) => {
   return b.toString();
 };
 
-const writeOutput = async ({ year, day, part, options }, { elapsed, result, logs }) => {
+const writeOutput = async ({ year, day, part, options }, output) => {
   const s = `0${day}`.slice(-2);
   await fs.mkdir(`./${year}/${s}/output`, { recursive: true });
-  await fs.writeFile(`./${year}/${s}/output/part-${part}-${options.test ? STAGE.test : STAGE.real}.json`, Buffer.from(JSON.stringify({ elapsed, result, logs }, null, 4)));
+  await fs.writeFile(`./${year}/${s}/output/part-${part}.json`, Buffer.from(JSON.stringify(output, null, 4)));
 };
 
 const createFiles = async ({ year, day }) => {
@@ -123,9 +123,9 @@ const init = async (params, options) => {
 
   await new Promise((resolve) => {
     const i = readline.createInterface({ input: stdin, output: stdout });
-    i.question(`Creating code and input files for year ${year}, day ${day}. This will overwrite any existing files. Are you sure? `, (r) => {
+    i.question(`About to create code and input files for year ${year}, day ${day}.\nThis will overwrite any existing files. Are you sure? [y/n] `, (r) => {
       i.close();
-      if (!['y', 'yes'].includes(r.toLowerCase())) {
+      if (!['y', 'yes', 'yes please', 'yea', 'yeah', 'aye', 'ok', 'sure', 'go', 'do it'].includes(r.toLowerCase())) {
         console.log(`Ok fine.`);
         process.exit();
       }
@@ -163,24 +163,30 @@ const run = async (params, options) => {
     throw new Error(`Not a valid part number: '${partString}'`);
   }
 
-  const logs = [];
-
-  const log = (...xs) => {
-    logs.push(...xs);
-    console.log(...xs);
-  };
-
   const input = await getInput({ year, day, part, options });
   const code = await getCode({ year, day, part, options });
 
-  log(`Running year ${year}, day ${day}, part ${part} with ${options.test ? 'test' : 'real'} input (size ${input.length})`);
+  console.log(`Running year ${year}, day ${day}, part ${part} with ${options.test ? 'test' : 'real'} input (size ${input.length})`);
 
-  const { elapsed, result } = await code(input);
+  const { time, result } = await code(input);
 
-  log(`Elapsed: ${elapsed}ms, result: ${result}`);
+  console.log(`Elapsed: ${time}ms, result: ${result}`);
 
-  await writeOutput({ year, day, part, options }, { elapsed, result, logs });
+  if (!options.test) {
+    await writeOutput({ year, day, part, options }, { time, result });
+  }
 };
+
+const runDay = async (params, options) => {
+  await run([...params, 1], options);
+  await run([...params, 2], options);
+}
+
+const runYear = async (params, options) => {
+  for (let day = 1; day < 26; day++) {
+    await runDay([...params, day], options);
+  }
+}
 
 (async () => {
   const { params, options } = getParams();
@@ -188,10 +194,14 @@ const run = async (params, options) => {
   const [cmd, ...ps] = params;
 
   switch (cmd) {
-    case 'run':
-      return run(ps, options);
     case 'init':
       return init(ps, options);
+    case 'part':
+      return run(ps, options);
+    case 'day':
+      return runDay(ps, options);
+    case 'year':
+      return runYear(ps, options);
     default:
       throw new Error(`Unsupported command '${cmd}'`);
   }
