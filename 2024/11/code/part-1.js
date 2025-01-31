@@ -4,19 +4,20 @@ export default (input) => {
 
   const step = (n) => {
     if (n === 0) {
-      return [[1]];
+      return [1];
     }
 
     const ds = digits(n);
 
-    if ((ds.length % 2) === 0) {
-      const l = ds.length / 2;
-      const ls = ds.slice(0, l);
-      const rs = ds.slice(l);
-      return [number(ls), number(rs)];
+    if (ds.length % 2) {
+      return [2024 * n];
     }
 
-    return [2024 * n];
+    const l = ds.length / 2;
+    const ls = ds.slice(0, l);
+    const rs = ds.slice(l);
+
+    return [number(ls), number(rs)];
   }
 
   let ns = input.split(' ').map((s) => parseInt(s, 10));
