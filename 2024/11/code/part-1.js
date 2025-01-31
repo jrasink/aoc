@@ -1,23 +1,18 @@
 export default (input) => {
-  const digits = (n) => `${n}`.split('').map((s) => parseInt(s, 10));
-  const number = (ds) => ds.reduce((n, d) => 10 * n + d, 0);
-
   const step = (n) => {
     if (n === 0) {
       return [1];
     }
 
-    const ds = digits(n);
+    const d = Math.floor(Math.log10(n)) + 1;
 
-    if (ds.length % 2) {
+    if (d % 2) {
       return [2024 * n];
     }
 
-    const l = ds.length / 2;
-    const ls = ds.slice(0, l);
-    const rs = ds.slice(l);
+    const h = 10 ** (d / 2);
 
-    return [number(ls), number(rs)];
+    return [Math.floor(n / h), n % h];
   }
 
   let ns = input.split(' ').map((s) => parseInt(s, 10));
