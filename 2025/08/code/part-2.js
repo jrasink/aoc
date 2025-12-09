@@ -15,28 +15,22 @@ export default (input) => {
 
   const circuits = positions.map((_, i) => i);
 
-  const done = () => {
-    const [i] = circuits;
-
-    for (const k of circuits) {
-      if (i !== k) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   for (const { from, to } of connections) {
     const move = circuits[to];
+
+    let done = true;
 
     for (let i = 0; i < circuits.length; i++) {
       if (circuits[i] === move) {
         circuits[i] = circuits[from];
       }
+
+      if (circuits[i] !== circuits[from]) {
+        done = false;
+      }
     }
 
-    if (done()) {
+    if (done) {
       return positions[from][0] * positions[to][0];
     }
   }
