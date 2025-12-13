@@ -121,7 +121,7 @@ export default (input) => {
       if (rest.reduce((b, ms) => b && (ms[i].n >= 0), true)) {
         if (target[i].n < 0) {
           if (ns[i].n >= 0) {
-            max = -1;
+            return null;
           } else {
             min = Math.ceil(unfraction(div(target[i], ns[i])));
           }
